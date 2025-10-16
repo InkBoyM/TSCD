@@ -1,0 +1,1870 @@
+<html lang="en" style="--accent-light: #3f51b5; --accent-dark: #8c9eff;"><head>
+<meta charset="UTF-8">
+<title>Classdash</title>
+<link id="favicon" rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48c3R5bGU+LmN7ZmlsbDojM2Y1MWI1O30udHtmaWxsOiNmZmY7Zm9udC1zaXplOjU1cHg7Zm9udC1mYW1pbHk6Um9ib3RvLEFyaWFsLHNhbnMtc2VyaWY7Zm9udC13ZWlnaHQ6NzAwO308L3N0eWxlPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iMjIiIGNsYXNzPSJjIi8+PHRleHQgeD0iMTciIHk9IjY4IiBjbGFzcz0idCI+Q0Q8L3RleHQ+PC9zdmc+">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<style>
+  @property --gradient-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+  }
+
+  :root {
+    --accent-light: #3f51b5;
+    --accent-dark: #7986cb;
+    
+    --bg: #fafafa;
+    --card: #fff;
+    --text: #212121;
+    --muted: #757575;
+    --accent: var(--accent-light);
+    --border: #e0e0e0;
+  }
+  [data-theme="dark"] {
+    --bg: #121212;
+    --card: #1e1e1e;
+    --text: #e0e0e0;
+    --muted: #9e9e9e;
+    --accent: var(--accent-dark);
+    --border: #333;
+  }
+
+  /* Base */
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: Roboto, system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+    background-color: var(--bg); color: var(--text);
+    transition: background .25s ease, color .25s ease;
+  }
+
+  /* App bar */
+  header {
+    background: var(--accent); color: #fff;
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.2);
+    position: sticky; top: 0; z-index: 100;
+    animation: slideDown 0.5s 0.1s ease-out backwards;
+  }
+  header h1 { margin: 0; font-size: 18px; font-weight: 600; justify-self: start; }
+  .header-center { display: flex; align-items: center; gap: 12px; justify-self: center; }
+  #clock { font-size: 16px; font-weight: 500; }
+  #custom-header-link { color: inherit; text-decoration: none; display: inline-flex; align-items: center; padding: 8px; border-radius: 50%; }
+  #internet-status { color: #81C784; transition: color 0.3s ease; }
+  #internet-status.offline { color: #E57373; }
+  .actions { display: flex; gap: 6px; justify-self: end; }
+  .icon-btn {
+    background: none; border: none; color: inherit; cursor: pointer;
+    padding: 8px; border-radius: 50%; position: relative; overflow: hidden;
+    transition: background-color 0.2s ease;
+  }
+  .material-icons { font-size: 22px; }
+  
+  /* Icon Button Hover Effects */
+  header .icon-btn:hover, #custom-header-link:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+  }
+  .search-container .icon-btn:hover,
+  .menu .icon-btn:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  [data-theme="dark"] .search-container .icon-btn:hover,
+  [data-theme="dark"] .menu .icon-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+
+  /* Search Bar Styles */
+  .search-container {
+    padding: 20px 16px 0 16px;
+    max-width: 600px;
+    margin: 0 auto;
+    animation: fadeInScale 0.6s 0.2s ease-out backwards;
+  }
+  .search-container form {
+    display: flex;
+    align-items: center;
+    background: var(--card);
+    border-radius: 50px;
+    box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    position: relative;
+    border: 1px solid var(--border);
+    transition: border-color: 0.4s ease;
+  }
+  .search-container form:focus-within {
+      border-color: transparent;
+  }
+  .search-input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    padding: 12px 20px;
+    font-size: 16px;
+    background: transparent;
+    color: var(--text);
+  }
+  .search-btn {
+    padding: 10px;
+    color: var(--muted);
+    transition: color .2s ease;
+  }
+  .search-btn:hover {
+    color: var(--accent);
+  }
+  
+  @keyframes gradient-rotate {
+    to {
+      --gradient-angle: 360deg;
+    }
+  }
+
+  .search-container form::after {
+      content: "";
+      position: absolute;
+      top: -1px; bottom: -1px; left: -1px; right: -1px;
+      border-radius: 50px;
+      border: 2px solid transparent;
+      background: conic-gradient(from var(--gradient-angle), #EA4335 0deg 90deg, #FBBC05 90deg 180deg, #34A853 180deg 270deg, #4285F4 270deg 360deg) border-box;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      pointer-events: none;
+  }
+  .search-container form[data-engine="bing"]::after {
+    background: conic-gradient(from var(--gradient-angle), #007DAA, #6CC24A, #007DAA) border-box;
+  }
+  .search-container form[data-engine="yahoo"]::after {
+    background: conic-gradient(from var(--gradient-angle), #400090, #8A00A8, #400090) border-box;
+  }
+  .search-container form[data-engine="duckduckgo"]::after {
+    background: conic-gradient(from var(--gradient-angle), #DE5833, #FFC92F, #DE5833) border-box;
+  }
+
+  .search-container form:focus-within::after {
+      opacity: 1;
+      animation: gradient-rotate 2s linear infinite;
+  }
+
+  .ai-search-container {
+    padding-top: 10px;
+    max-width: 450px;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .ai-search-container.offline form {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .ai-search-container .search-input {
+    font-size: 14px;
+    padding: 8px 18px;
+  }
+  .ai-search-container .search-btn {
+    padding: 6px;
+  }
+  .ai-search-container .search-btn .material-icons {
+    font-size: 18px;
+  }
+  .ai-search-container form { flex-grow: 1; }
+
+  /* Main Layout */
+  .container { max-width: 900px; margin: 20px auto; padding: 0 16px; transition: opacity 0.15s ease-in-out; }
+  .container.is-transitioning { opacity: 0; }
+  
+  .link.dragging { opacity: 0.4; }
+  .category-dropzone.drag-over { outline: 2px dashed var(--accent); outline-offset: 4px; border-radius: 6px; }
+
+  .view-list details { background: var(--card); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,.1); transition: background .25s ease, border-color .25s ease; }
+  .view-list summary { list-style: none; padding: 12px 16px; cursor: pointer; font-weight: 500; display: flex; justify-content: space-between; align-items: center; position: relative; }
+  .view-list summary::-webkit-details-marker { display: none; }
+
+  .menu { position: relative; }
+  .menu-open { position: relative; z-index: 10; overflow: visible; }
+  .menu-content { position: absolute; right: 0; top: calc(100% + 4px); background: var(--card); border: 1px solid var(--border); border-radius: 6px; box-shadow: 0 6px 16px rgba(0,0,0,.18); min-width: 160px; display: none; z-index: 1000; animation: fadeIn .18s ease; }
+  .menu-content button { width: 100%; padding: 10px 12px; background: none; border: none; text-align: left; cursor: pointer; color: var(--text); position: relative; overflow: hidden; }
+  .menu-content button:hover { background: rgba(0,0,0,.06); }
+  
+  .view-list .links { padding: 8px 16px 12px; }
+  .view-list .link { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); transition: background .25s ease, border-color .25s ease; cursor: grab; }
+  .view-list .link:last-child { border-bottom: none; }
+  .view-list .link-content { display: flex; align-items: center; gap: 10px; }
+  .view-list .favicon { width: 16px; height: 16px; }
+  .view-list .link a { color: var(--accent); text-decoration: none; }
+  .view-list .link a:hover { text-decoration: underline; }
+  .view-list .link .menu { position: relative; }
+
+  .view-tile .category-wrapper { margin-bottom: 16px; }
+  .view-tile .category-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 32px 0 12px 0;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border);
+    color: var(--text);
+  }
+  .view-tile .category-header h2 { margin: 0; font: inherit; }
+  .view-tile .category-header .icon-btn { color: var(--muted); }
+  .view-tile .category-header .icon-btn:hover { color: var(--text); }
+  .view-tile .links { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 16px; padding: 16px 0; }
+  
+  .view-tile .link { 
+    background: var(--card); 
+    border-radius: 8px; 
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.2);
+    aspect-ratio: 1 / 1; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    position: relative; 
+    padding: 8px; 
+    text-align: center; 
+    transition: transform 0.2s ease, box-shadow 0.28s cubic-bezier(.4,0,.2,1); 
+    cursor: grab; 
+  }
+  .view-tile .link:hover { 
+    transform: translateY(-2px); 
+    box-shadow: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.2);
+  }
+
+  .view-tile .link-content { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; width: 100%; height: 100%; }
+  .view-tile .favicon { width: 48px; height: 48px; border-radius: 4px; }
+  .view-tile .link a { color: var(--text); text-decoration: none; font-size: 13px; font-weight: 500; word-break: break-word; }
+  .view-tile .link .menu { position: absolute; top: 0; right: 0; }
+  
+  .link { animation: fadeInUp 0.4s ease-out forwards; opacity: 0; }
+
+  /* Animations */
+  @keyframes slideDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  @keyframes fadeInScale { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+  @keyframes fadeIn { from {opacity: 0; transform: translateY(-4px);} to {opacity: 1; transform: translateY(0);} }
+  .view-list details[open] .links { animation: fadeIn .22s ease; }
+  @keyframes scaleIn { from {opacity: 0; transform: scale(0.95);} to {opacity: 1; transform: scale(1);} }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Ripple */
+  .icon-btn::after, .menu-content button::after, .btn::after, .view-tile .link::after { content: ""; position: absolute; border-radius: 50%; pointer-events: none; transform: scale(0); opacity: 0; background: rgba(0,0,0,.15); }
+  .icon-btn:active::after, .menu-content button:active::after, .btn:active::after, .view-tile .link:active::after { left: var(--ripple-x, 50%); top: var(--ripple-y, 50%); width: 140%; padding-top: 140%; transform: translate(-50%,-50%) scale(1); opacity: 1; transition: transform .35s ease, opacity .6s ease; }
+
+  /* Dialogs */
+  dialog { border: none; border-radius: 8px; padding: 0; width: 340px; max-width: 95vw; box-shadow: 0 4px 16px rgba(0,0,0,.35); background-color: var(--card); }
+  dialog[open] { animation: scaleIn .2s ease-out; }
+  dialog::backdrop { background-color: rgba(0, 0, 0, 0.4); }
+  dialog header { background: var(--accent); color: #fff; padding: 12px 14px; display: flex; justify-content: space-between; align-items: center; }
+  dialog header h3 { margin: 0; font-size: 16px; }
+  dialog .content { padding: 16px; display: grid; gap: 10px; max-height: 70vh; overflow-y: auto; }
+  dialog footer { padding: 10px 14px; display: flex; justify-content: flex-end; gap: 8px; align-items: center; }
+  .btn { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; cursor: pointer; background: var(--card); color: var(--text); position: relative; overflow: hidden; transition: background-color 0.2s ease, border-color 0.2s ease; }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; filter: brightness(100%); transition: filter 0.2s ease; }
+
+  /* Rectangular Button Hover Effects */
+  .btn:hover {
+    background-color: #f0f0f0;
+    border-color: #dcdcdc;
+  }
+  [data-theme="dark"] .btn:hover {
+    background-color: #2a2a2a;
+    border-color: #444;
+  }
+  .btn.primary:hover {
+    filter: brightness(90%);
+  }
+
+  .whinestalk-section { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .setting-row { display: flex; justify-content: space-between; align-items: center; }
+  #whinestalkOptions { display: grid; gap: 10px; margin-top: 10px; }
+  dialog .content input[type="text"], dialog .content input[type="time"], dialog .content select { width: 100%; padding: 8px; border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 6px; font-size: 14px; }
+  dialog .content input[type="color"] { min-width: 40px; height: 30px; }
+  
+  /* Icon Selector Styles */
+  .icon-selector { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+  .icon-selector label { border: 2px solid transparent; border-radius: 8px; padding: 4px; cursor: pointer; background-color: var(--bg); transition: border-color 0.2s; }
+  .icon-selector input { display: none; }
+  .icon-selector img { width: 32px; height: 32px; display: block; }
+  .icon-selector input:checked + img { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+  
+  /* Tutorial Dialog Styles */
+  #tutorialDialog { width: 500px; max-width: 95vw; }
+  #tutorialDialog .content { display: flex; flex-direction: column; gap: 16px; padding: 16px 24px 24px 24px; white-space: pre-wrap; }
+  #tutorialDialog footer { justify-content: space-between; }
+  .tutorial-footer-prefs { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); cursor: pointer; }
+  .tutorial-footer-prefs input { accent-color: var(--accent); cursor: pointer; }
+  .tutorial-item { display: flex; align-items: center; gap: 10px; }
+  .tutorial-item .material-icons { color: var(--accent); }
+  .tutorial-item h4 { margin: 0; font-size: 16px; font-weight: 600; color: var(--text); }
+  #tutorialDialog p { margin: 4px 0 0 0; padding-left: 34px; line-height: 1.5; color: var(--muted); }
+  
+  #tutorial-video-container {
+    width: calc(100% + 48px);
+    margin: -16px -24px 16px -24px;
+    overflow: hidden;
+    border-radius: 8px 8px 0 0;
+  }
+
+  #fullscreen-video-container {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: var(--bg);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.5s ease, opacity 0.5s ease;
+  }
+  #fullscreen-video-container video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: all 0.7s cubic-bezier(0.45, 0, 0.55, 1);
+  }
+  
+  /* Tutorial Animation Logic */
+  @keyframes tutorialContentFadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+  #tutorialDialog .content .tutorial-section {
+      opacity: 0;
+  }
+  #tutorialDialog[open] .tutorial-section.visible {
+      opacity: 0;
+      animation: tutorialContentFadeIn 0.4s ease-out forwards;
+  }
+  #tutorialDialog[open] .tutorial-section.visible:nth-child(2) { animation-delay: 0.1s; }
+  #tutorialDialog[open] .tutorial-section.visible:nth-child(3) { animation-delay: 0.2s; }
+  #tutorialDialog[open] .tutorial-section.visible:nth-child(4) { animation-delay: 0.3s; }
+  #tutorialDialog[open] .tutorial-section.visible:nth-child(5) { animation-delay: 0.4s; }
+  #tutorialDialog[open] .tutorial-section.visible:nth-child(6) { animation-delay: 0.5s; }
+  #tutorialDialog[open] .tutorial-section.visible:nth-child(7) { animation-delay: 0.6s; }
+
+  /* Chat Dialog Styles */
+  #chatDialog { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; border-radius: 0; resize: none; overflow: hidden; padding: 0; transform: none !important; transition: all 0.25s ease-out; }
+  #chatDialog.minimized::backdrop { background: transparent; }
+  .chat-dialog-wrapper { width: 100%; height: 100%; display: flex; flex-direction: column; }
+  .chat-header { flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 8px 0 16px; background-color: var(--accent); color: white; }
+  .chat-drag-handle { flex-grow: 1; height: 48px; line-height: 48px; user-select: none; }
+  .chat-header h3 { margin: 0; font-size: 16px; }
+  #chat-messages { flex-grow: 1; padding: 16px; overflow-y: auto; background-color: var(--card); }
+  .chat-message { max-width: 85%; margin-bottom: 12px; padding: 10px 14px; border-radius: 18px; line-height: 1.5; word-wrap: break-word; animation: fadeInUp 0.3s ease-out; white-space: pre-wrap; }
+  .chat-message.user { background: var(--accent); color: white; border-bottom-right-radius: 4px; margin-left: auto; }
+  .chat-message.assistant { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-bottom-left-radius: 4px; }
+  .chat-message.thinking { font-style: italic; color: var(--muted); }
+  #chat-form-container { flex-shrink: 0; padding: 10px 16px; border-top: 1px solid var(--border); background-color: var(--bg); }
+  #chat-form { display: flex; align-items: center; background: var(--card); border: 1px solid var(--border); border-radius: 25px; padding: 4px; }
+  #chat-input { flex-grow: 1; border: none; background: transparent; outline: none; padding: 8px 12px; font-size: 15px; color: var(--text); }
+  #chatDialog.minimized { height: 48px; width: 300px; position: fixed; bottom: 10px !important; right: 20px !important; left: auto !important; top: auto !important; resize: none; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.3); border-radius: 8px; }
+  #chatDialog.minimized .chat-dialog-wrapper > *:not(.chat-header) { display: none; }
+  
+  /* History Dialog */
+  #historyDialog { width: 500px; }
+  #historyDialog .content { padding: 8px 0; }
+  #historyDialog details { border-bottom: 1px solid var(--border); }
+  #historyDialog details:last-child { border-bottom: none; }
+  #historyDialog summary { padding: 12px 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; list-style: none; }
+  #historyDialog summary:hover { background: rgba(0,0,0,0.04); }
+  #historyDialog summary::-webkit-details-marker { display: none; }
+  .history-item-title { text-overflow: ellipsis; white-space: nowrap; overflow: hidden; font-size: 14px; font-weight: 500; padding-right: 16px; }
+  .history-item-actions .icon-btn { color: var(--muted); }
+  .history-chat-log { padding: 8px 16px 16px; max-height: 300px; overflow-y: auto; background-color: var(--bg); border-top: 1px solid var(--border); }
+
+  /* Scheduler Styles */
+  #scheduler-config .day-schedule { border: 1px solid var(--border); border-radius: 6px; padding: 8px; margin-bottom: 8px; }
+  #scheduler-config .day-schedule h4 { margin: 0 0 8px; font-size: 14px; }
+  .time-slot { display: flex; justify-content: space-between; align-items: center; background-color: var(--bg); padding: 6px 8px; border-radius: 4px; margin-bottom: 4px; font-size: 13px; }
+  #scheduleSlotDialog .content { display: grid; gap: 16px; }
+  #scheduleSlotDialog .categories-list { display: grid; gap: 8px; margin-top: 8px; }
+  #scheduleSlotDialog .categories-list label { display: block; }
+
+
+  footer { text-align: center; padding: 20px; margin-top: 40px; font-size: 14px; color: var(--muted); border-top: 1px solid var(--border); }
+  footer a { color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  footer a:hover { color: var(--accent); text-decoration: underline; }
+</style>
+</head>
+<body data-theme="light">
+  <div id="cloak-prompt" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 10000; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; font-size: 1.2em;">
+      <p style="margin: 0 0 16px 0;">A scheduled cloak is active.</p>
+      <button id="enter-cloak-btn" class="btn primary" style="padding: 12px 24px; font-size: 1em;">Enter Cloaked Mode</button>
+      <button id="dismiss-cloak-btn" class="btn" style="margin-top: 10px;">Dismiss</button>
+  </div>
+  <div id="fullscreen-video-container" style="opacity: 1; background-color: rgba(0, 0, 0, 0.4); display: none;"></div>
+  <header>
+    <h1>Classdash</h1>
+    <div class="header-center">
+        <a href="https://classroom.google.com" id="custom-header-link" target="_blank" rel="noopener noreferrer" title="Google Classroom" style="display: inline-flex;">
+            <span class="material-icons" id="custom-header-icon">school</span>
+        </a>
+        <div id="clock">10:37:13 PM</div>
+        <span class="material-icons" id="internet-status" title="Internet: Connected">wifi</span>
+    </div>
+    <div class="actions">
+      <button class="icon-btn" title="Toggle view" onclick="toggleView()"><span class="material-icons" id="viewIcon">view_module</span></button>
+      <button class="icon-btn" title="Add category" onclick="addCategory()"><span class="material-icons">add</span></button>
+      <button class="icon-btn" title="Settings" onclick="openSettings()"><span class="material-icons">settings</span></button>
+      <button class="icon-btn" title="Theme" onclick="toggleTheme()"><span class="material-icons" id="themeIcon">dark_mode</span></button>
+      <button class="icon-btn" title="Help" onclick="openTutorial(true, 1.0)"><span class="material-icons">help_outline</span></button>
+    </div>
+  </header>
+
+  <div class="search-container">
+    <form id="main-search-form" action="https://www.google.com/search" method="get" target="_blank" data-engine="google">
+      <input type="text" name="q" placeholder="Search Google or type a URL" class="search-input" required="">
+      <button type="submit" class="icon-btn search-btn" title="Search">
+        <span class="material-icons">search</span>
+      </button>
+    </form>
+  </div>
+  
+  <div class="search-container ai-search-container">
+    <button class="icon-btn" title="Chat history" onclick="openHistory()" style="--ripple-x: 20px; --ripple-y: 20.199996948242188px;">
+        <span class="material-icons">history</span>
+    </button>
+    <form id="ai-form">
+      <input type="text" id="ai-question" placeholder="Ask AI a question..." class="search-input" required="">
+      <button type="submit" class="icon-btn search-btn" title="Ask AI">
+        <span class="material-icons">auto_awesome</span>
+      </button>
+    </form>
+  </div>
+  
+  <div id="scheduler-toggle-container" style="max-width: 900px; margin: 0 auto 10px; padding: 0 16px; text-align: right;"></div>
+
+  <div class="container view-list" id="categories"><div class="category-dropzone" data-cat-index="0"><details><summary>School Links<div class="menu"><button class="icon-btn" title="Category menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content" style="display: none;"><button onclick="addLink(0)">Add link</button><button onclick="renameCategory(0)">Rename</button><button onclick="removeCategory(0)">Remove category</button></div></div></summary><div class="links">
+          <div class="link" draggable="true" data-cat-index="0" data-link-index="0" style="animation-delay: 0ms;">
+            <a href="https://clever.com" target="_blank" class="link-content">
+              <img src="https://www.google.com/s2/favicons?domain=clever.com&amp;sz=64" class="favicon" alt="" width="16" height="16" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiM3NTc1NzUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTMuOSAxMmMwLTEuNzEgMS4zOS0zLjEgMy4xLTMuMWg0VjdIN2MtMi43NiAwLTUgMi4yNC01IDVzMi4yNCA1IDUgNWg0di0xLjlIN2MtMS43MSAwLTMuMS0xLjM5LTMuMS0zLjF6TTggMTNoOHYtMkg4djJ6bTktNmgtNHYxLjloNGMxLjcxIDAgMy4xIDEuMzkgMy4xIDMuMXMtMS4zOSAzLjEtMy4xIDMuMWgtNFYxN2g0YzIuNzYgMCA1LTUuMjQtNSA1cy0yLjI0LTUtNS01eiIvPjwvc3ZnPg==';">
+              <span>Clever</span>
+            </a>
+            <div class="menu"><button class="icon-btn" title="Link menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content" style="display: none;"><button onclick="editLink(0,0)">Edit</button><button onclick="removeLink(0,0)">Delete</button></div></div>
+          </div>
+          <div class="link" draggable="true" data-cat-index="0" data-link-index="1" style="animation-delay: 30ms;">
+            <a href="https://classroom.google.com" target="_blank" class="link-content">
+              <img src="https://www.gstatic.com/classroom/logo_square_rounded.svg" class="favicon" alt="" width="16" height="16" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiM3NTc1NzUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTMuOSAxMmMwLTEuNzEgMS4zOS0zLjEgMy4xLTMuMWg0VjdIN2MtMi43NiAwLTUgMi4yNC01IDVzMi4yNCA1IDUgNWg0di0xLjlIN2MtMS43MSAwLTMuMS0xLjM5LTMuMS0zLjF6TTggMTNoOHYtMkg4djJ6bTktNmgtNHYxLjloNGMxLjcxIDAgMy4xIDEuMzkgMy4xIDMuMXMtMS4zOSAzLjEtMy4xIDMuMWgtNFYxN2g0YzIuNzYgMCA1LTUuMjQtNSA1cy0yLjI0LTUtNS01eiIvPjwvc3ZnPg==';">
+              <span>Google Classroom</span>
+            </a>
+            <div class="menu"><button class="icon-btn" title="Link menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content" style="display: none;"><button onclick="editLink(0,1)">Edit</button><button onclick="removeLink(0,1)">Delete</button></div></div>
+          </div></div></details></div><div class="category-dropzone" data-cat-index="1"><details><summary>Fun Stuff<div class="menu"><button class="icon-btn" title="Category menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content" style="display: none;"><button onclick="addLink(1)">Add link</button><button onclick="renameCategory(1)">Rename</button><button onclick="removeCategory(1)">Remove category</button></div></div></summary><div class="links">
+          <div class="link" draggable="true" data-cat-index="1" data-link-index="0" style="animation-delay: 60ms;">
+            <a href="https://youtube.com" target="_blank" class="link-content">
+              <img src="https://www.google.com/s2/favicons?domain=youtube.com&amp;sz=64" class="favicon" alt="" width="16" height="16" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiM3NTc1NzUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTMuOSAxMmMwLTEuNzEgMS4zOS0zLjEgMy4xLTMuMWg0VjdIN2MtMi43NiAwLTUgMi4yNC01IDVzMi4yNCA1IDUgNWg0di0xLjlIN2MtMS43MSAwLTMuMS0xLjM5LTMuMS0zLjF6TTggMTNoOHYtMkg4djJ6bTktNmgtNHYxLjloNGMxLjcxIDAgMy4xIDEuMzkgMy4xIDMuMXMtMS4zOSAzLjEtMy4xIDMuMWgtNFYxN2g0YzIuNzYgMCA1LTUuMjQtNSA1cy0yLjI0LTUtNS01eiIvPjwvc3ZnPg==';">
+              <span>YouTube</span>
+            </a>
+            <div class="menu"><button class="icon-btn" title="Link menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content" style="display: none;"><button onclick="editLink(1,0)">Edit</button><button onclick="removeLink(1,0)">Delete</button></div></div>
+          </div></div></details></div></div>
+  
+  <dialog id="chatDialog">
+    <div class="chat-dialog-wrapper">
+      <div class="chat-header">
+          <h3 class="chat-drag-handle">AI Chat</h3>
+          <div class="actions">
+              <button class="icon-btn" title="Minimize" onclick="toggleMinimizeChat(this)">
+                  <span class="material-icons">remove</span>
+              </button>
+              <button class="icon-btn" title="Close" onclick="closeChatPanel()">
+                  <span class="material-icons">close</span>
+              </button>
+          </div>
+      </div>
+      <div id="chat-messages"></div>
+      <div class="chat-form-container">
+          <form id="chat-form">
+              <input type="text" id="chat-input" placeholder="Continue the conversation..." required="" autocomplete="off">
+              <button type="submit" class="icon-btn search-btn" title="Send">
+                  <span class="material-icons">send</span>
+              </button>
+          </form>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="settingsDialog">
+    <header><h3>Settings</h3></header>
+    <div class="content">
+      <div class="whinestalk-section" style="margin-top:0; padding-top:0; border-top:none;">
+          <label>Site Icon</label>
+          <div id="icon-selector" class="icon-selector"></div>
+          <button class="btn" onclick="document.getElementById('icon-upload-input').click()" style="width:100%; margin-top: 8px; display:flex; align-items:center; justify-content:center; gap: 4px;">
+              <span class="material-icons" style="font-size:18px;">upload_file</span> Upload Your Own
+          </button>
+      </div>
+      <div class="whinestalk-section">
+          <label for="searchEngineSelect">Search Engine</label>
+          <select id="searchEngineSelect">
+              <option value="google">Google</option>
+              <option value="bing">Bing</option>
+              <option value="yahoo">Yahoo</option>
+              <option value="duckduckgo">DuckDuckGo</option>
+          </select>
+      </div>
+      <div class="whinestalk-section">
+        <label for="accentPicker">Accent color</label>
+        <input type="color" id="accentPicker" value="#3f51b5">
+      </div>
+      <div>
+        <label for="themeSelect">Theme</label>
+        <select id="themeSelect"> <option value="light">Light</option> <option value="dark">Dark</option> <option value="system">System (auto)</option> </select>
+      </div>
+
+      <div class="whinestalk-section">
+          <details>
+              <summary style="font-weight: 500; cursor: pointer;">Advanced Theming</summary>
+              <div id="advanced-theme-options" style="display: grid; gap: 12px; margin-top: 10px; padding: 10px 0 0 10px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <label for="bgColorPicker">Background Color</label>
+                      <input type="color" id="bgColorPicker">
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <label for="textColorPicker">Text Color</label>
+                      <input type="color" id="textColorPicker">
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                      <label for="cardColorPicker">Card/Search Color</label>
+                      <input type="color" id="cardColorPicker">
+                  </div>
+                  <div>
+                      <label>Background Image</label>
+                      <div style="display:flex; gap: 8px; align-items: center; margin-top: 4px;">
+                          <button class="btn" onclick="document.getElementById('bg-image-upload-input').click()" style="flex:1;">
+                              Upload Image
+                          </button>
+                          <button class="btn" id="clearBgImageBtn" onclick="clearBgImageSetting(event)" style="display:none;">
+                              Clear
+                          </button>
+                      </div>
+                  </div>
+                  <div class="setting-row">
+                      <label for="disableAnimationCheckbox">Disable Welcome Animation</label>
+                      <input type="checkbox" id="disableAnimationCheckbox">
+                  </div>
+                  <button class="btn" onclick="resetAdvancedTheme(event)" style="margin-top: 5px;">Reset Advanced Theme</button>
+              </div>
+          </details>
+      </div>
+      
+      <div class="whinestalk-section">
+          <h4 style="margin-top:0; margin-bottom: 8px; font-weight: 500;">Custom Header Button</h4>
+          <div>
+              <label for="customLinkUrlInput">Link URL</label>
+              <input type="text" id="customLinkUrlInput" placeholder="https://example.com">
+          </div>
+          <div style="margin-top: 10px;">
+              <label for="customLinkTitleInput">Tooltip Text</label>
+              <input type="text" id="customLinkTitleInput" placeholder="A name for your button">
+          </div>
+          <div style="margin-top: 10px;">
+              <label for="customLinkIconSelect">Icon</label>
+              <select id="customLinkIconSelect"></select>
+          </div>
+      </div>
+
+      <div class="whinestalk-section">
+        <h4 style="margin-top:0; margin-bottom: 8px; font-weight: 500;">AI Settings</h4>
+        <button id="changeApiKeyBtn" class="btn" style="width:100%;">Change API Key</button>
+        <div id="apiKeyInputContainer" style="display:none; margin-top: 10px;">
+            <label for="apiKeyInput">Groq API Key</label>
+            <input type="text" id="apiKeyInput" placeholder="gsk_...">
+        </div>
+      </div>
+
+      <div class="whinestalk-section">
+          <div class="setting-row">
+            <label for="schedulerEnabledCheckbox">Enable Category Scheduler</label>
+            <input type="checkbox" id="schedulerEnabledCheckbox">
+          </div>
+          <div id="scheduler-config" style="display: none; margin-top: 10px;"></div>
+      </div>
+
+      <div class="whinestalk-section">
+          <div class="setting-row">
+            <label for="whinestalkModeCheckbox">MRS Whinestalk Mode</label>
+            <input type="checkbox" id="whinestalkModeCheckbox" onchange="toggleWhinestalkUI()">
+          </div>
+          <div id="whinestalkOptions" style="display: none;">
+              <div> <label for="newTitleInput">New Tab Title</label> <input type="text" id="newTitleInput" placeholder="My Drive - Google Drive" oninput="toggleWhinestalkUI()"> </div>
+              <button class="btn" onclick="openInAboutBlank()">Open in New Tab</button>
+          </div>
+      </div>
+      <div id="secret-setting-container" class="whinestalk-section" style="display: none; background: rgba(255,255,0,0.1); border-radius: 6px; padding: 10px; border-color: #FBBC05;">
+          <div class="setting-row">
+              <label for="blockSearchFixCheckbox" style="font-weight: 500;">Use Block Search Fix</label>
+              <input type="checkbox" id="blockSearchFixCheckbox">
+          </div>
+      </div>
+      <div class="whinestalk-section">
+          <label style="margin-bottom: 4px; display: block;">Backup &amp; Restore</label>
+          <div style="display:flex; gap: 8px;">
+              <button class="btn" onclick="exportConfig()" style="flex:1; display:flex; align-items:center; justify-content:center; gap: 4px;"> <span class="material-icons" style="font-size:18px;">file_download</span> Export </button>
+              <button class="btn" onclick="document.getElementById('import-input').click()" style="flex:1; display:flex; align-items:center; justify-content:center; gap: 4px;"> <span class="material-icons" style="font-size:18px;">file_upload</span> Import </button>
+          </div>
+      </div>
+      <div class="whinestalk-section">
+        <button class="btn" onclick="downloadPage()" style="width:100%;"> <span class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">file_download</span> Download Page as HTML </button>
+      </div>
+      <div class="whinestalk-section">
+        <button class="btn" onclick="resetClassdash()" style="width:100%; text-align:center; background:#f44336; color:white; border:none;"> <span class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:4px;">restart_alt</span> Reset App </button>
+        <p style="font-size:12px; color:var(--muted); text-align:center; margin-top:4px;"> This will erase all settings, links, and icons. </p>
+      </div>
+    </div>
+    <footer> <button class="btn" onclick="closeSettings()">Cancel</button> <button class="btn primary" onclick="applySettings()">Apply</button> </footer>
+  </dialog>
+
+  <dialog id="editLinkDialog">
+    <header><h3>Edit Link</h3></header>
+    <div class="content">
+      <input type="hidden" id="editLinkCatIndex">
+      <input type="hidden" id="editLinkIndex">
+      <div>
+        <label for="linkTitleInput">Title</label>
+        <input type="text" id="linkTitleInput" required="">
+      </div>
+      <div>
+        <label for="linkUrlInput">URL</label>
+        <input type="text" id="linkUrlInput" required="">
+      </div>
+      <div>
+        <label for="linkIconInput">Custom Icon URL (optional)</label>
+        <input type="text" id="linkIconInput" placeholder="Paste image or data URL">
+      </div>
+    </div>
+    <footer>
+      <button class="btn" onclick="cancelLinkEdit()">Cancel</button>
+      <button class="btn primary" onclick="saveLink()">Save</button>
+    </footer>
+  </dialog>
+  
+  <dialog id="scheduleSlotDialog">
+    <header><h3 id="scheduleSlotDialogTitle">Add Time Slot</h3></header>
+    <div class="content">
+        <input type="hidden" id="scheduleDayIndex">
+        <input type="hidden" id="scheduleSlotIndex">
+        <div>
+            <label>Apply to Days:</label>
+            <div id="scheduleDaysList" class="categories-list" style="grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));"></div>
+        </div>
+        <div class="setting-row">
+            <label for="scheduleStartTime">Start Time</label>
+            <input type="time" id="scheduleStartTime" required="">
+        </div>
+        <div class="setting-row">
+            <label for="scheduleEndTime">End Time</label>
+            <input type="time" id="scheduleEndTime" required="">
+        </div>
+        <div>
+            <label>Visible Categories:</label>
+            <div id="scheduleCategoriesList" class="categories-list"></div>
+        </div>
+        <div class="whinestalk-section">
+            <label>Scheduled Cloak (Optional)</label>
+            <div id="scheduleWhinestalkOptions" style="display: grid; gap: 10px; margin-top: 10px;">
+                <div class="setting-row">
+                    <label for="scheduleAutoCloak">Auto-cloak on load</label>
+                    <input type="checkbox" id="scheduleAutoCloak">
+                </div>
+                <div>
+                    <label for="scheduleWhinestalkTitle" style="font-size: 13px; color: var(--muted);">Tab Title</label>
+                    <input type="text" id="scheduleWhinestalkTitle" placeholder="e.g., Google Docs">
+                </div>
+                <div>
+                    <label style="font-size: 13px; color: var(--muted);">Site Icon</label>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                      <div id="schedule-icon-selector" class="icon-selector" style="flex-grow: 1;"></div>
+                      <button class="btn" onclick="document.getElementById('schedule-icon-upload-input').click()">Upload</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer><button class="btn" onclick="this.closest('dialog').close()">Cancel</button><button class="btn primary" onclick="saveScheduleSlot()">Save</button></footer>
+  </dialog>
+
+  <dialog id="tutorialDialog" style="visibility: visible; opacity: 1; transition: opacity 0.4s 0.2s;">
+      <header><h3>How to Use Classdash</h3></header>
+      <div class="content">
+          <div id="tutorial-video-container"><video id="intro-video" src="https://codehs.com/uploads/e446390c11149def89350495dcb73173" style="width: 100%; display: block;" muted="" playsinline=""></video></div>
+          <div class="tutorial-section visible"> <div class="tutorial-item"><span class="material-icons">search</span><h4>Searching Google</h4></div> <p>Use the top search bar to quickly search Google in a new tab!</p> </div>
+          <div class="tutorial-section visible"> <div class="tutorial-item"><span class="material-icons">auto_awesome</span><h4>Ask the AI</h4></div> <p>Use the second search bar to ask the AI a question. A chat window will pop up.</p> </div>
+          <div class="tutorial-section visible"> <div class="tutorial-item"><span class="material-icons">create_new_folder</span><h4>Making Groups (Categories)</h4></div> <p>Click the <b>plus (+)</b> button at the top to create a new group for your links, like "Math Games" or "Art Stuff".</p> </div>
+          <div class="tutorial-section visible"> <div class="tutorial-item"><span class="material-icons">add_link</span><h4>Adding Websites (Links)</h4></div> <p>You can <b>drag and drop</b> a link from another website right into a group, or use the menu on a category to add one.</p> </div>
+          <div class="tutorial-section visible"> <div class="tutorial-item"><span class="material-icons">tune</span><h4>Customize Your Page</h4></div> <p>Click the <b>gear icon</b> to open Settings. You can change the colors, the site icon, and more!</p> </div>
+          <div class="tutorial-section visible"> <div class="tutorial-item"><span class="material-icons">add</span><h4>Terms</h4></div> <p>By Clicking: <b>Got It!</b> you agree to the classdash TOS and usage of cookies</p> </div>
+
+      </div>
+      <footer>
+        <div class="tutorial-footer-prefs"> <input type="checkbox" id="dontShowTutorialAgain"> <label for="dontShowTutorialAgain">Don't show this again</label> </div> <button class="btn primary" onclick="closeTutorial()" style="--ripple-x: 23.1624755859375px; --ripple-y: 18.08746337890625px;">Got it!</button>
+      </footer>
+  </dialog>
+  
+  <dialog id="historyDialog">
+      <header><h3>Chat History</h3></header>
+      <div class="content" id="historyContent"><details><summary><span class="history-item-title">hi</span>
+                                      <div class="history-item-actions">
+                                          <button class="icon-btn" title="Open in chat window"><span class="material-icons">open_in_new</span></button>
+                                          <button class="icon-btn" title="Delete chat"><span class="material-icons">delete_outline</span></button>
+                                      </div></summary><div class="history-chat-log"><div class="chat-message user">hi</div><div class="chat-message assistant">How can I help you today?</div></div></details></div>
+      <footer><button class="btn primary" onclick="document.getElementById('historyDialog').close()" style="--ripple-x: 36.67498779296875px; --ripple-y: 4.199981689453125px;">Close</button></footer>
+  </dialog>
+
+  <footer>
+    <a href="https://classdash.space" target="_blank">classdash.space & templateslide.com</a> | © 2024 | <a href="https://classdash.space/terms" target="_blank">Terms</a>
+    <p> All rights reserved</p> 
+    <h6>We do NOT collect your data (COPPA Compliant)</h6>
+  </footer>
+
+  <input type="file" id="import-input" accept=".json" style="display:none;">
+  <input type="file" id="icon-upload-input" accept="image/*" style="display:none;">
+  <input type="file" id="bg-image-upload-input" accept="image/*" style="display:none;">
+  <input type="file" id="schedule-icon-upload-input" accept="image/*" style="display:none;">
+  
+
+<script>
+  // ================================================================================= //
+  // CONFIGURATION & STATE MANAGEMENT
+  // ================================================================================= //
+  const STORAGE_KEY = "class-portal:v2";
+  const ICONS = {
+      'default': {
+          name: 'Classdash Default',
+          data: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgMTAwIj48c3R5bGU+LmN7ZmlsbDojM2Y1MWI1O30udHtmaWxsOiNmZmY7Zm9udC1zaXplOjU1cHg7Zm9udC1mYW1pbHk6Um9ib3RvLEFyaWFsLHNhbnMtc2VyaWY7Zm9udC13ZWlnaHQ6NzAwO308L3N0eWxlPjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiByeD0iMjIiIGNsYXNzPSJjIi8+PHRleHQgeD0iMTciIHk9IjY4IiBjbGFzcz0idCI+Q0Q8L3RleHQ+PC9zdmc+'
+      }
+  };
+  const CUSTOM_LINK_ICONS = ['school', 'home', 'games', 'videogame_asset', 'work', 'email', 'cloud', 'photo_camera', 'code', 'link', 'star', 'favorite', 'task_alt', 'schedule'];
+  const SEARCH_ENGINES = {
+      google: { url: 'https://www.google.com/search', queryParam: 'q', placeholder: 'Search Google or type a URL' },
+      bing: { url: 'https://www.bing.com/search', queryParam: 'q', placeholder: 'Search Bing or type a URL' },
+      yahoo: { url: 'https://search.yahoo.com/search', queryParam: 'p', placeholder: 'Search Yahoo or type a URL' },
+      duckduckgo: { url: 'https://duckduckgo.com/', queryParam: 'q', placeholder: 'Search DuckDuckGo or type a URL' }
+  };
+  const DEFAULT_CATEGORIES = [
+    { name: "School Links", links: [{ title: "Clever", url: "https://clever.com", icon: null }, { title: "Google Classroom", url: "https://classroom.google.com", icon: null }] },
+    { name: "Fun Stuff", links: [{ title: "YouTube", url: "https://youtube.com", icon: null }] }
+  ];
+  let schedulerForceShowAll = false;
+  let state = loadState();
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      const defaultScheduler = { enabled: false, schedule: { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] } };
+      return { 
+        icon: parsed.icon || "default", customIconData: parsed.customIconData || null, theme: parsed.theme || "light", 
+        accent: parsed.accent || "#3f51b5", view: parsed.view || "list", categories: parsed.categories || DEFAULT_CATEGORIES,
+        isWhinestalkMode: parsed.isWhinestalkMode || false, whinestalkTitle: parsed.whinestalkTitle || "Classdash",
+        bgColor: parsed.bgColor || null, textColor: parsed.textColor || null, cardColor: parsed.cardColor || null,
+        bgImageData: parsed.bgImageData || null, disableAnimation: parsed.disableAnimation || false,
+        chatHistory: parsed.chatHistory || [], activeChatId: parsed.activeChatId || null,
+        scheduler: parsed.scheduler || defaultScheduler,
+        customLink: parsed.customLink || { url: 'https://classroom.google.com', icon: 'school', title: 'Google Classroom' },
+        searchEngine: parsed.searchEngine || 'google',
+        useBlockSearchFix: parsed.useBlockSearchFix || false,
+        userApiKey: parsed.userApiKey || null
+      };
+    } catch {
+      return { 
+        icon: "default", customIconData: null, theme: "light", accent: "#3f51b5", view: "list", categories: DEFAULT_CATEGORIES,
+        isWhinestalkMode: false, whinestalkTitle: "Classdash",
+        bgColor: null, textColor: null, cardColor: null, bgImageData: null, disableAnimation: false,
+        chatHistory: [], activeChatId: null,
+        scheduler: { enabled: false, schedule: { 0: [], 1: [], 2: [], 3: [], 4: [], 5: [], 6: [] } },
+        customLink: { url: 'https://classroom.google.com', icon: 'school', title: 'Google Classroom' },
+        searchEngine: 'google',
+        useBlockSearchFix: false,
+        userApiKey: null
+      };
+    }
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } 
+    catch (e) { console.log("Could not save the settings, but that's okay!"); }
+  }
+  
+  // ================================================================================= //
+  // RENDERING & UI UPDATES
+  // ================================================================================= //
+  function render() {
+    applyCustomLink();
+    applySearchEngine();
+    applyAccent(state.accent); 
+    applyTheme(state.theme); 
+    applyAdvancedTheme();
+    applyView(state.view); 
+    applyScheduledSettings();
+    
+    const container = document.getElementById("categories");
+    container.innerHTML = "";
+    
+    const categoriesToRender = getVisibleCategories();
+    
+    categoriesToRender.forEach((cat) => {
+      const catIndex = state.categories.findIndex(c => c.name === cat.name);
+      if (catIndex === -1) return;
+
+      const linksHtml = cat.links.map((link, linkIndex) => {
+        const faviconUrl = getIconForUrl(link);
+        const finalUrl = applyBlockFix(link.url);
+        return `
+          <div class="link" draggable="true" data-cat-index="${catIndex}" data-link-index="${linkIndex}">
+            <a href="${escapeAttr(finalUrl)}" target="_blank" class="link-content">
+              <img src="${faviconUrl}" class="favicon" alt="" width="16" height="16" onerror="this.onerror=null;this.src='data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiM3NTc1NzUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTMuOSAxMmMwLTEuNzEgMS4zOS0zLjEgMy4xLTMuMWg0VjdIN2MtMi43NiAwLTUgMi4yNC01IDVzMi4yNCA1IDUgNWg0di0xLjlIN2MtMS43MSAwLTMuMS0xLjM5LTMuMS0zLjF6TTggMTNoOHYtMkg4djJ6bTktNmgtNHYxLjloNGMxLjcxIDAgMy4xIDEuMzkgMy4xIDMuMXMtMS4zOSAzLjEtMy4xIDMuMWgtNFYxN2g0YzIuNzYgMCA1LTUuMjQtNSA1cy0yLjI0LTUtNS01eiIvPjwvc3ZnPg==';">
+              <span>${escapeHtml(link.title)}</span>
+            </a>
+            <div class="menu"><button class="icon-btn" title="Link menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content"><button onclick="editLink(${catIndex},${linkIndex})">Edit</button><button onclick="removeLink(${catIndex},${linkIndex})">Delete</button></div></div>
+          </div>`;
+      }).join("");
+      const categoryElement = document.createElement('div');
+      if (state.view === 'tile') { 
+        categoryElement.className = 'category-wrapper category-dropzone'; 
+        categoryElement.dataset.catIndex = catIndex; 
+        const headerHTML = `
+          <div class="category-header">
+            <h2>${escapeHtml(cat.name)}</h2>
+            <div class="menu"><button class="icon-btn" title="Category menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content"><button onclick="addLink(${catIndex})">Add link</button><button onclick="renameCategory(${catIndex})">Rename</button><button onclick="removeCategory(${catIndex})">Remove category</button></div></div>
+          </div>`;
+        categoryElement.innerHTML = `${headerHTML}<div class="links">${linksHtml}</div>`;
+      } else { 
+        categoryElement.className = 'category-dropzone'; 
+        categoryElement.dataset.catIndex = catIndex; 
+        categoryElement.innerHTML = `<details><summary>${escapeHtml(cat.name)}<div class="menu"><button class="icon-btn" title="Category menu" onclick="toggleMenu(this); event.stopPropagation();"><span class="material-icons" style="color:inherit">more_vert</span></button><div class="menu-content"><button onclick="addLink(${catIndex})">Add link</button><button onclick="renameCategory(${catIndex})">Rename</button><button onclick="removeCategory(${catIndex})">Remove category</button></div></div></summary><div class="links">${linksHtml}</div></details>`; 
+      }
+      container.appendChild(categoryElement);
+    });
+    addEventListeners();
+    renderSchedulerToggle(categoriesToRender.length);
+  }
+
+  function applyCustomLink() {
+      const link = document.getElementById('custom-header-link');
+      const icon = document.getElementById('custom-header-icon');
+      if (!link || !icon) return;
+      const data = state.customLink || {};
+      if (data.url && data.icon) {
+          link.href = applyBlockFix(formatUrl(data.url));
+          link.title = data.title || '';
+          icon.textContent = data.icon;
+          link.style.display = 'inline-flex';
+      } else {
+          link.style.display = 'none';
+      }
+  }
+
+  function applySearchEngine() {
+      const form = document.getElementById('main-search-form');
+      const input = form.querySelector('.search-input');
+      const engineConf = SEARCH_ENGINES[state.searchEngine] || SEARCH_ENGINES.google;
+      
+      form.action = engineConf.url;
+      input.name = engineConf.queryParam;
+      input.placeholder = engineConf.placeholder;
+      form.dataset.engine = state.searchEngine;
+  }
+
+  function applyAccent(c) { document.documentElement.style.setProperty("--accent-light", c); document.documentElement.style.setProperty("--accent-dark", lightenHexColor(c, 30)); }
+  function applyTheme(t) { 
+    let finalTheme = t; 
+    if (t === "system") { finalTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"; } 
+    document.body.dataset.theme = finalTheme; 
+    const themeIcon = document.getElementById("themeIcon"); 
+    if (themeIcon) { themeIcon.textContent = finalTheme === 'dark' ? 'light_mode' : 'dark_mode'; } 
+  }
+  function applyView(v) { const c = document.getElementById("categories"), i = document.getElementById("viewIcon"); if (v === 'tile') { c.classList.add('view-tile'); c.classList.remove('view-list'); if (i) i.textContent = 'view_list'; } else { c.classList.add('view-list'); c.classList.remove('view-tile'); if (i) i.textContent = 'view_module'; } }
+  function applyTitle() { document.title = (state.isWhinestalkMode && state.whinestalkTitle) ? state.whinestalkTitle : 'Classdash'; }
+  function applyIcon(idOrData) {
+      const f = document.getElementById('favicon');
+      if (!f) return;
+      if (idOrData && idOrData.startsWith('data:image')) {
+          f.href = idOrData;
+      } else if (idOrData === 'custom' && state.customIconData) {
+          f.href = state.customIconData;
+      } else if (ICONS[idOrData]) {
+          f.href = ICONS[idOrData].data;
+      }
+  }
+  
+  function applyAdvancedTheme() {
+    const root = document.documentElement;
+    if(state.bgColor) root.style.setProperty('--bg', state.bgColor); else root.style.removeProperty('--bg');
+    if(state.textColor) root.style.setProperty('--text', state.textColor); else root.style.removeProperty('--text');
+    if(state.cardColor) root.style.setProperty('--card', state.cardColor); else root.style.removeProperty('--card');
+
+    if (state.bgImageData) {
+        document.body.style.backgroundImage = `url(${state.bgImageData})`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundAttachment = 'fixed';
+    } else {
+        document.body.style.backgroundImage = '';
+    }
+  }
+
+  // ================================================================================= //
+  // CATEGORY & LINK MANAGEMENT
+  // ================================================================================= //
+  function addCategory() { const n = prompt("Category name?"); if (n) { state.categories.push({ name: n.trim(), links: [] }); saveState(); render(); }}
+  function renameCategory(i) { const n = prompt("New category name:", state.categories[i].name); if (n) { state.categories[i].name = n.trim(); saveState(); render(); }}
+  function removeCategory(i) { if (confirm("Delete category?")) { state.categories.splice(i, 1); saveState(); render(); }}
+  
+  function addLink(catIndex) {
+    const dialog = document.getElementById('editLinkDialog');
+    dialog.querySelector('h3').textContent = 'Add Link';
+    document.getElementById('editLinkCatIndex').value = catIndex;
+    document.getElementById('editLinkIndex').value = -1;
+    document.getElementById('linkTitleInput').value = '';
+    document.getElementById('linkUrlInput').value = '';
+    document.getElementById('linkIconInput').value = '';
+    dialog.showModal();
+  }
+
+  function editLink(catIndex, linkIndex) {
+    const dialog = document.getElementById('editLinkDialog');
+    dialog.querySelector('h3').textContent = 'Edit Link';
+    const link = state.categories[catIndex].links[linkIndex];
+    document.getElementById('editLinkCatIndex').value = catIndex;
+    document.getElementById('editLinkIndex').value = linkIndex;
+    document.getElementById('linkTitleInput').value = link.title;
+    document.getElementById('linkUrlInput').value = link.url;
+    document.getElementById('linkIconInput').value = link.icon || '';
+    dialog.showModal();
+  }
+  
+  function cancelLinkEdit() {
+      // This function simply closes the dialog. No state is saved or changed.
+      // This ensures that canceling an edit will not delete or alter the original link.
+      document.getElementById('editLinkDialog').close();
+  }
+
+  function saveLink() {
+    const catIndex = document.getElementById('editLinkCatIndex').value;
+    const linkIndex = document.getElementById('editLinkIndex').value;
+    const newTitle = document.getElementById('linkTitleInput').value.trim();
+    const newUrl = document.getElementById('linkUrlInput').value.trim();
+    const newIcon = document.getElementById('linkIconInput').value.trim();
+
+    if (!newTitle || !newUrl) { return alert('Title and URL are required.'); }
+
+    const linkData = { title: newTitle, url: formatUrl(newUrl), icon: newIcon || null };
+
+    if (linkIndex == -1) {
+        state.categories[catIndex].links.push(linkData);
+    } else {
+        state.categories[catIndex].links[linkIndex] = linkData;
+    }
+    saveState();
+    render();
+    document.getElementById('editLinkDialog').close();
+  }
+
+  function removeLink(i, j) { state.categories[i].links.splice(j, 1); saveState(); render(); }
+  
+  // ================================================================================= //
+  // FEATURE FUNCTIONS (Settings, Import/Export, etc.)
+  // ================================================================================= //
+  function toggleView() { const c = document.getElementById("categories"); c.classList.add('is-transitioning'); setTimeout(() => { state.view = state.view === 'list' ? 'tile' : 'list'; saveState(); render(); c.classList.remove('is-transitioning'); }, 150); }
+  function toggleTheme() { 
+    const currentTheme = document.body.dataset.theme;
+    state.theme = currentTheme === "light" ? "dark" : "light"; 
+    saveState(); 
+    applyTheme(state.theme); 
+  }
+  function openSettings() {
+    const s = document.getElementById('icon-selector'); s.innerHTML = ''; Object.keys(ICONS).forEach(k => { s.innerHTML += `<label title="${ICONS[k].name}"><input type="radio" name="icon-choice" value="${k}" ${state.icon === k ? 'checked' : ''}><img src="${ICONS[k].data}" alt="${ICONS[k].name}"></label>`; });
+    if (state.icon === 'custom' && state.customIconData) { s.innerHTML += `<label title="Your Uploaded Icon" id="custom-icon-label"><input type="radio" name="icon-choice" value="custom" checked><img src="${state.customIconData}" alt="Custom Icon"></label>`; document.querySelector('#settingsDialog')._customIconData = state.customIconData; }
+    
+    document.getElementById("searchEngineSelect").value = state.searchEngine;
+    document.getElementById("accentPicker").value = state.accent || "#3f51b5"; 
+    document.getElementById("themeSelect").value = state.theme || "light"; 
+    document.getElementById('whinestalkModeCheckbox').checked = state.isWhinestalkMode; 
+    document.getElementById('newTitleInput').value = state.whinestalkTitle;
+    
+    const computedStyles = getComputedStyle(document.documentElement);
+    document.getElementById('bgColorPicker').value = state.bgColor || computedStyles.getPropertyValue('--bg').trim();
+    document.getElementById('textColorPicker').value = state.textColor || computedStyles.getPropertyValue('--text').trim();
+    document.getElementById('cardColorPicker').value = state.cardColor || computedStyles.getPropertyValue('--card').trim();
+    document.getElementById('clearBgImageBtn').style.display = state.bgImageData ? 'block' : 'none';
+    document.getElementById('settingsDialog')._bgImageData = state.bgImageData;
+    document.getElementById('disableAnimationCheckbox').checked = state.disableAnimation;
+    
+    document.getElementById('customLinkUrlInput').value = state.customLink.url;
+    document.getElementById('customLinkTitleInput').value = state.customLink.title;
+    const iconSelect = document.getElementById('customLinkIconSelect');
+    iconSelect.innerHTML = '';
+    CUSTOM_LINK_ICONS.forEach(iconName => {
+        const option = document.createElement('option');
+        option.value = iconName;
+        option.textContent = iconName.replace(/_/g, ' ');
+        iconSelect.appendChild(option);
+    });
+    iconSelect.value = state.customLink.icon;
+
+    document.getElementById('apiKeyInputContainer').style.display = 'none';
+    document.getElementById('changeApiKeyBtn').style.display = 'block';
+    document.getElementById('apiKeyInput').value = state.userApiKey || '';
+    
+    document.getElementById('schedulerEnabledCheckbox').checked = state.scheduler.enabled;
+    document.getElementById('blockSearchFixCheckbox').checked = state.useBlockSearchFix;
+    renderSchedulerUI();
+    document.getElementById('scheduler-config').style.display = state.scheduler.enabled ? 'block' : 'none';
+
+    toggleWhinestalkUI(); 
+    document.getElementById("settingsDialog").showModal();
+  }
+  function closeSettings() { 
+    document.getElementById("settingsDialog").close(); 
+    applyScheduledSettings();
+  }
+  function applySettings() {
+    state.icon = document.querySelector('input[name="icon-choice"]:checked').value; if (state.icon === 'custom') { state.customIconData = document.querySelector('#settingsDialog')._customIconData; } else { state.customIconData = null; }
+    state.searchEngine = document.getElementById("searchEngineSelect").value;
+    state.accent = document.getElementById("accentPicker").value; 
+    state.theme = document.getElementById("themeSelect").value; 
+    state.isWhinestalkMode = document.getElementById('whinestalkModeCheckbox').checked; 
+    state.whinestalkTitle = document.getElementById('newTitleInput').value;
+    state.bgColor = document.getElementById('bgColorPicker').value;
+    state.textColor = document.getElementById('textColorPicker').value;
+    state.cardColor = document.getElementById('cardColorPicker').value;
+    state.bgImageData = document.getElementById('settingsDialog')._bgImageData;
+    state.disableAnimation = document.getElementById('disableAnimationCheckbox').checked;
+    
+    state.customLink = {
+        url: document.getElementById('customLinkUrlInput').value,
+        title: document.getElementById('customLinkTitleInput').value.trim(),
+        icon: document.getElementById('customLinkIconSelect').value
+    };
+    state.userApiKey = document.getElementById('apiKeyInput').value.trim() || null;
+
+    state.scheduler.enabled = document.getElementById('schedulerEnabledCheckbox').checked;
+    state.useBlockSearchFix = document.getElementById('blockSearchFixCheckbox').checked;
+
+    saveState(); 
+    render();
+    closeSettings();
+  }
+
+  // ================================================================================= //
+  // AI CHAT FUNCTIONS
+  // ================================================================================= //
+  function renderChat(chatId) {
+      const messagesContainer = document.getElementById('chat-messages');
+      messagesContainer.innerHTML = '';
+      const chat = state.chatHistory.find(c => c.id === chatId);
+      if (!chat) return;
+
+      chat.messages.forEach(msg => {
+          const messageEl = document.createElement('div');
+          messageEl.className = `chat-message ${msg.role}`;
+          messageEl.textContent = msg.content;
+          messagesContainer.appendChild(messageEl);
+      });
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+  }
+  
+  function openChatPanel(chatId) {
+      const dialog = document.getElementById('chatDialog');
+      state.activeChatId = chatId;
+      saveState();
+      renderChat(chatId);
+      if (!dialog.open) {
+        dialog.showModal();
+      }
+      if(dialog.classList.contains('minimized')) {
+        toggleMinimizeChat(dialog.querySelector('[onclick^="toggleMinimizeChat"]'));
+      }
+  }
+
+  function closeChatPanel() {
+      document.getElementById('chatDialog').close();
+      state.activeChatId = null;
+      saveState();
+  }
+
+  function toggleMinimizeChat(button) {
+      const dialog = document.getElementById('chatDialog');
+      const icon = button.querySelector('.material-icons');
+      dialog.classList.toggle('minimized');
+      if (dialog.classList.contains('minimized')) {
+          icon.textContent = 'web_asset';
+          button.title = 'Maximize';
+      } else {
+          icon.textContent = 'remove';
+          button.title = 'Minimize';
+      }
+  }
+
+  async function sendMessage(userMessage) {
+      if (!userMessage) return;
+
+      let currentChat;
+      if (state.activeChatId) {
+          currentChat = state.chatHistory.find(c => c.id === state.activeChatId);
+      }
+      
+      if (!currentChat) {
+          const newChat = {
+              id: Date.now(),
+              title: userMessage.length > 40 ? userMessage.substring(0, 37) + '...' : userMessage,
+              messages: []
+          };
+          state.chatHistory.unshift(newChat);
+          state.activeChatId = newChat.id;
+          currentChat = newChat;
+          openChatPanel(currentChat.id);
+      }
+
+      currentChat.messages.push({ role: 'user', content: userMessage });
+      renderChat(currentChat.id);
+      
+      const messagesContainer = document.getElementById('chat-messages');
+      const thinkingEl = document.createElement('div');
+      thinkingEl.className = 'chat-message assistant thinking';
+      thinkingEl.textContent = 'Thinking...';
+      messagesContainer.appendChild(thinkingEl);
+      messagesContainer.scrollTop = messagesContainer.scrollHeight;
+      
+      const apiKeyToUse = state.userApiKey || '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';
+      
+      if (!apiKeyToUse.startsWith('gsk_')) {
+          thinkingEl.remove();
+          currentChat.messages.push({ role: 'assistant', content: "Oops! You need to enter a valid API key in Settings to use the AI." });
+          renderChat(currentChat.id);
+          saveState();
+          return;
+      }
+      
+      try {
+          const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+              method: 'POST',
+              headers: { 'Authorization': `Bearer ${apiKeyToUse}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                  messages: currentChat.messages.map(({role, content}) => ({role, content})),
+                  model: 'llama-3.1-8b-instant'
+              })
+          });
+          if (!response.ok) { throw new Error(`Error: ${response.status}`); }
+          const data = await response.json();
+          const aiResponse = data.choices[0].message.content;
+
+          currentChat.messages.push({ role: 'assistant', content: aiResponse });
+      } catch (error) {
+          currentChat.messages.push({ role: 'assistant', content: `Oops! I had trouble getting an answer.\n\n${error.message}` });
+      } finally {
+          thinkingEl.remove();
+          renderChat(currentChat.id);
+          saveState();
+      }
+  }
+
+  function openHistory() {
+      const historyContent = document.getElementById('historyContent');
+      historyContent.innerHTML = '';
+      const historyDialog = document.getElementById('historyDialog');
+
+      if (state.chatHistory.length === 0) {
+          historyContent.innerHTML = '<p style="text-align:center; color: var(--muted); padding: 16px;">No chats yet!</p>';
+      } else {
+          state.chatHistory.forEach(chat => {
+              const details = document.createElement('details');
+              const summary = document.createElement('summary');
+              summary.innerHTML = `<span class="history-item-title">${escapeHtml(chat.title)}</span>
+                                      <div class="history-item-actions">
+                                          <button class="icon-btn" title="Open in chat window"><span class="material-icons">open_in_new</span></button>
+                                          <button class="icon-btn" title="Delete chat"><span class="material-icons">delete_outline</span></button>
+                                      </div>`;
+              const chatLog = document.createElement('div');
+              chatLog.className = 'history-chat-log';
+              chat.messages.forEach(msg => {
+                  chatLog.innerHTML += `<div class="chat-message ${msg.role}">${escapeHtml(msg.content)}</div>`;
+              });
+
+              details.appendChild(summary);
+              details.appendChild(chatLog);
+              historyContent.appendChild(details);
+
+              summary.querySelector('[title="Open in chat window"]').addEventListener('click', (e) => {
+                  e.stopPropagation(); e.preventDefault();
+                  openChatPanel(chat.id);
+                  historyDialog.close();
+              });
+
+              summary.querySelector('[title="Delete chat"]').addEventListener('click', (e) => {
+                  e.stopPropagation(); e.preventDefault();
+                  if (confirm('Are you sure you want to delete this chat?')) {
+                      state.chatHistory = state.chatHistory.filter(c => c.id !== chat.id);
+                      if (state.activeChatId === chat.id) closeChatPanel();
+                      saveState();
+                      openHistory();
+                  }
+              });
+          });
+      }
+      historyDialog.showModal();
+  }
+
+  function exportConfig() { const d = localStorage.getItem(STORAGE_KEY) || JSON.stringify(state), a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([d],{type:'application/json'})); a.download = `classdash_config_${new Date().toISOString().slice(0,10)}.json`; a.click(); URL.revokeObjectURL(a.href); a.remove(); }
+  function handleImport(e) { const f = e.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { try { if (JSON.parse(e.target.result)?.categories && confirm("Replace current settings?")) { localStorage.setItem(STORAGE_KEY, e.target.result); location.reload(); }} catch (err) { alert("Invalid file."); }}; r.readAsText(f); e.target.value = ''; }
+  function handleIconUpload(e) {
+      const f=e.target.files[0];if(!f||!f.type.startsWith('image/')){alert('Please select an image.');return}
+      const r=new FileReader();r.onload=e=>{const d=e.target.result;document.querySelector('#settingsDialog')._customIconData=d;let l=document.getElementById('custom-icon-label');if(!l){document.getElementById('icon-selector').innerHTML+=`<label title="Your Uploaded Icon" id="custom-icon-label"><input type="radio" name="icon-choice" value="custom"><img src="${d}" alt="Custom Icon"></label>`}else{l.querySelector('img').src=d}document.querySelector('input[value="custom"]').checked=true};r.readAsDataURL(f);e.target.value=''
+  }
+  function handleBgImageUpload(e) {
+      const f = e.target.files[0]; if (!f || !f.type.startsWith('image/')) return;
+      const r = new FileReader();
+      r.onload = (event) => {
+          document.getElementById('settingsDialog')._bgImageData = event.target.result;
+          document.getElementById('clearBgImageBtn').style.display = 'block';
+      };
+      r.readAsDataURL(f);
+  }
+  function clearBgImageSetting(event) {
+      event.preventDefault();
+      document.getElementById('settingsDialog')._bgImageData = null;
+      document.getElementById('bg-image-upload-input').value = '';
+      document.getElementById('clearBgImageBtn').style.display = 'none';
+  }
+  function resetAdvancedTheme(event) {
+      event.preventDefault();
+      document.getElementById('settingsDialog')._bgImageData = null;
+      document.getElementById('bg-image-upload-input').value = '';
+      document.getElementById('clearBgImageBtn').style.display = 'none';
+      document.getElementById('disableAnimationCheckbox').checked = false;
+      
+      const themeInDialog = document.getElementById('themeSelect').value;
+      let isDark = themeInDialog === 'dark';
+      if (themeInDialog === 'system') isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+      document.getElementById('bgColorPicker').value = isDark ? '#121212' : '#fafafa';
+      document.getElementById('textColorPicker').value = isDark ? '#e0e0e0' : '#212121';
+      document.getElementById('cardColorPicker').value = isDark ? '#1e1e1e' : '#ffffff';
+  }
+
+  function openTutorial(showTutorialAfter = true, playbackSpeed = 1.0) {
+      const fsContainer = document.getElementById('fullscreen-video-container');
+      const dialog = document.getElementById('tutorialDialog');
+      const videoPlaceholder = document.getElementById('tutorial-video-container');
+      const video = document.getElementById('intro-video');
+
+      const startAnimation = () => {
+          video.playbackRate = playbackSpeed;
+          fsContainer.appendChild(video);
+          fsContainer.style.opacity = '1';
+          fsContainer.style.backgroundColor = 'var(--bg)';
+          fsContainer.style.display = 'flex';
+          video.style.cssText = '';
+          
+          const playPromise = video.play();
+          if (playPromise !== undefined) {
+              playPromise.catch(e => {
+                  console.log("Autoplay failed, skipping animation.", e);
+                  fsContainer.style.display = 'none';
+                  if (showTutorialAfter) dialog.showModal();
+              });
+          }
+      };
+
+      video.onended = () => {
+          if (showTutorialAfter) {
+              dialog.style.visibility = 'hidden'; dialog.showModal();
+              const targetRect = videoPlaceholder.getBoundingClientRect();
+              dialog.close(); dialog.style.visibility = 'visible';
+
+              requestAnimationFrame(() => {
+                  fsContainer.style.backgroundColor = 'rgba(0,0,0,0.4)';
+                  video.style.width = `${targetRect.width}px`;
+                  video.style.height = `${targetRect.height}px`;
+                  video.style.borderRadius = '8px';
+              });
+
+              dialog.style.opacity = '0'; dialog.showModal();
+              dialog.style.transition = 'opacity 0.4s 0.2s ease';
+              dialog.style.opacity = '1';
+
+              video.addEventListener('transitionend', () => {
+                  videoPlaceholder.appendChild(video);
+                  video.style.cssText = 'width: 100%; display: block;';
+                  fsContainer.style.display = 'none';
+                  dialog.querySelectorAll('.tutorial-section').forEach(el => el.classList.add('visible'));
+              }, { once: true });
+          } else {
+              fsContainer.style.opacity = '0';
+              setTimeout(() => { fsContainer.style.display = 'none'; }, 500);
+          }
+      };
+
+      video.addEventListener('canplaythrough', startAnimation, { once: true });
+      if (video.readyState >= 4) { startAnimation(); }
+  }
+
+  function closeTutorial() { 
+      if (document.getElementById('dontShowTutorialAgain').checked) {
+          localStorage.setItem('classdash-tutorial-seen', 'true');
+      }
+      document.getElementById('tutorialDialog').close();
+  }
+
+  function downloadPage() { 
+      const docClone = document.cloneNode(true);
+      const scriptTag = docClone.querySelector('script');
+      scriptTag.textContent = scriptTag.textContent.replace('let state = loadState();', `let state = ${JSON.stringify(state)};`);
+      docClone.querySelector('title').textContent = document.title;
+      
+      const fileContent = '<!DOCTYPE html>\n' + docClone.documentElement.outerHTML;
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(new Blob([fileContent],{type:'text/html'})); 
+      a.download='ClassDash.html'; 
+      a.click(); 
+      URL.revokeObjectURL(a.href); 
+  }
+  function resetClassdash() { if (confirm("Reset everything?")) { localStorage.clear(); location.reload(); } }
+  
+  function openInAboutBlank() {
+    const newTitle = document.getElementById('newTitleInput').value || 'Classdash';
+    const newTab = window.open('about:blank', '_blank');
+    if (newTab) {
+      newTab.document.title = newTitle;
+      const iframe = newTab.document.createElement('iframe');
+      newTab.document.head.appendChild(document.getElementById('favicon').cloneNode(true));
+      iframe.src = window.location.href;
+      iframe.style.cssText = 'border:none; width:100%; height:100%; margin:0; padding:0;';
+      newTab.document.body.style.cssText = 'margin:0; overflow:hidden;';
+      newTab.document.body.appendChild(iframe);
+      closeSettings();
+    } else {
+      alert('Please allow popups for this site!');
+    }
+  }
+
+  // ================================================================================= //
+  // SCHEDULER HELPER
+  // ================================================================================= //
+  function findActiveSlot() {
+      if (!state.scheduler.enabled) return null;
+
+      const now = new Date();
+      const dayIndex = now.getDay();
+      const currentTime = now.getHours().toString().padStart(2, '0') + ':' + now.getMinutes().toString().padStart(2, '0');
+      const scheduleForToday = state.scheduler.schedule[dayIndex] || [];
+      
+      return scheduleForToday.find(slot => {
+          if (slot.start <= slot.end) { // Normal same-day slot (e.g., 09:00 - 17:00)
+              return currentTime >= slot.start && currentTime < slot.end;
+          } else { // Slot crosses midnight (e.g., 22:00 - 02:00)
+              return currentTime >= slot.start || currentTime < slot.end;
+          }
+      });
+  }
+
+  // ================================================================================= //
+  // SCHEDULER FUNCTIONS
+  // ================================================================================= //
+  function renderSchedulerUI() {
+    const container = document.getElementById('scheduler-config');
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    container.innerHTML = days.map((day, dayIndex) => {
+        const slotsHtml = (state.scheduler.schedule[dayIndex] || []).map((slot, slotIndex) => `
+            <div class="time-slot">
+                <span>${slot.start} - ${slot.end} (${slot.categories.length} cats)</span>
+                <div>
+                    <button class="icon-btn" title="Edit" onclick="openScheduleSlotDialog(${dayIndex}, ${slotIndex})"><span class="material-icons" style="font-size:16px;">edit</span></button>
+                    <button class="icon-btn" title="Delete" onclick="deleteScheduleSlot(${dayIndex}, ${slotIndex})"><span class="material-icons" style="font-size:16px;">delete</span></button>
+                </div>
+            </div>
+        `).join('');
+        return `
+            <div class="day-schedule">
+                <h4>${day}</h4>
+                ${slotsHtml}
+                <button class="btn" style="width:100%; margin-top:4px;" onclick="openScheduleSlotDialog(${dayIndex})">Add Time Slot</button>
+            </div>
+        `;
+    }).join('');
+  }
+
+  function openScheduleSlotDialog(dayIndex, slotIndex = -1) {
+    document.getElementById('scheduleDayIndex').value = dayIndex;
+    document.getElementById('scheduleSlotIndex').value = slotIndex;
+    const dialog = document.getElementById('scheduleSlotDialog');
+    const categoriesList = document.getElementById('scheduleCategoriesList');
+    const title = document.getElementById('scheduleSlotDialogTitle');
+
+    const daysList = document.getElementById('scheduleDaysList');
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    daysList.innerHTML = days.map((day, i) => `
+        <label><input type="checkbox" name="scheduleDay" value="${i}" ${i === dayIndex && slotIndex === -1 ? 'checked' : ''}>${day}</label>
+    `).join('');
+
+    const slot = slotIndex > -1 ? state.scheduler.schedule[dayIndex][slotIndex] : null;
+
+    if (slot) {
+        const dayCheckbox = daysList.querySelector(`input[value="${dayIndex}"]`);
+        if (dayCheckbox) dayCheckbox.checked = true;
+    }
+    
+    document.getElementById('scheduleStartTime').value = slot ? slot.start : '';
+    document.getElementById('scheduleEndTime').value = slot ? slot.end : '';
+    title.textContent = slot ? 'Edit Time Slot' : 'Add Time Slot';
+
+    categoriesList.innerHTML = state.categories.map(cat => `
+        <label><input type="checkbox" value="${cat.name}" ${slot && slot.categories.includes(cat.name) ? 'checked' : ''}>${escapeHtml(cat.name)}</label>
+    `).join('');
+
+    document.getElementById('scheduleAutoCloak').checked = slot?.autoCloak || false;
+    document.getElementById('scheduleWhinestalkTitle').value = slot?.whinestalk?.title || '';
+    
+    const scheduleIconSelector = document.getElementById('schedule-icon-selector');
+    scheduleIconSelector.innerHTML = `
+      <label title="No Change"><input type="radio" name="schedule-icon-choice" value=""><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iI2JkYmRiZCI+PHBhdGggZD0iTTEyIDJDNi40OCAyIDIgNi40OCAyIDEycy00LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0wIDE4Yy00LjQxIDAtOC0zLjU5LTgtOHMzLjU5LTggOC04IDggMy41OSA4IDh6bS0xLTFoMnYtN2gtMnY3em0wLTloMnYtMmgtMnYyem0zLjI0LTRMMTMgMTMuMjRWOWgxdjQuNzZsMS43Ni45NUwxNi4yNCAxNnoiLz48L3N2Zz4=" alt="No Change"></label>
+      <label title="Default"><input type="radio" name="schedule-icon-choice" value="default"><img src="${ICONS.default.data}" alt="Default"></label>
+    `;
+
+    if (slot?.whinestalk?.icon && slot.whinestalk.icon.startsWith('data:image')) {
+        const dataUrl = slot.whinestalk.icon;
+        scheduleIconSelector.innerHTML += `<label title="Your Upload" class="custom-upload-preview"><input type="radio" name="schedule-icon-choice" value="${escapeAttr(dataUrl)}"><img src="${escapeAttr(dataUrl)}" alt="Custom Upload"></label>`;
+    }
+    
+    const iconToSelect = slot?.whinestalk?.icon || "";
+    let radioSelected = false;
+    scheduleIconSelector.querySelectorAll('input[name="schedule-icon-choice"]').forEach(radio => {
+        if (radio.value === iconToSelect) { radio.checked = true; radioSelected = true; }
+    });
+    if (!radioSelected) { scheduleIconSelector.querySelector('input[value=""]').checked = true; }
+
+    dialog.showModal();
+  }
+
+  function saveScheduleSlot() {
+    const originalDayIndex = parseInt(document.getElementById('scheduleDayIndex').value);
+    const slotIndex = parseInt(document.getElementById('scheduleSlotIndex').value);
+    const start = document.getElementById('scheduleStartTime').value;
+    const end = document.getElementById('scheduleEndTime').value;
+    
+    if (!start || !end) { return alert('Please select a start and end time.'); }
+    const selectedDays = Array.from(document.querySelectorAll('#scheduleDaysList input:checked')).map(cb => parseInt(cb.value));
+    if (selectedDays.length === 0) { return alert('Please select at least one day.'); }
+
+    const categories = Array.from(document.querySelectorAll('#scheduleCategoriesList input:checked')).map(cb => cb.value);
+    const autoCloak = document.getElementById('scheduleAutoCloak').checked;
+    const whinestalkTitle = document.getElementById('scheduleWhinestalkTitle').value;
+    const whinestalkIcon = document.querySelector('input[name="schedule-icon-choice"]:checked')?.value || "";
+    
+    const newSlot = { start, end, categories, autoCloak, whinestalk: { title: whinestalkTitle, icon: whinestalkIcon } };
+    
+    if (slotIndex > -1) {
+        state.scheduler.schedule[originalDayIndex].splice(slotIndex, 1);
+    }
+
+    selectedDays.forEach(dayIdx => {
+        if (!state.scheduler.schedule[dayIdx]) state.scheduler.schedule[dayIdx] = [];
+        state.scheduler.schedule[dayIdx].push(newSlot);
+        state.scheduler.schedule[dayIdx].sort((a, b) => a.start.localeCompare(b.start));
+    });
+
+    saveState();
+    renderSchedulerUI();
+    document.getElementById('scheduleSlotDialog').close();
+  }
+
+  function deleteScheduleSlot(dayIndex, slotIndex) {
+    if (confirm('Are you sure you want to delete this time slot?')) {
+        state.scheduler.schedule[dayIndex].splice(slotIndex, 1);
+        saveState();
+        renderSchedulerUI();
+    }
+  }
+  
+  function getVisibleCategories() {
+    if (!state.scheduler.enabled || schedulerForceShowAll) { return [...state.categories]; }
+    const activeSlot = findActiveSlot();
+    if (activeSlot) { return state.categories.filter(cat => activeSlot.categories.includes(cat.name)); }
+    return [...state.categories];
+  }
+
+  function renderSchedulerToggle(renderedCount) {
+    const container = document.getElementById('scheduler-toggle-container');
+    container.innerHTML = '';
+    if (state.scheduler.enabled && renderedCount < state.categories.length) {
+        container.innerHTML = `<button class="btn" onclick="toggleForceShowAll(true)">Show All</button>`;
+    } else if (state.scheduler.enabled && schedulerForceShowAll) {
+        container.innerHTML = `<button class="btn" onclick="toggleForceShowAll(false)">Show Scheduled</button>`;
+    }
+  }
+
+  function toggleForceShowAll(show) { schedulerForceShowAll = show; render(); }
+  
+  function applyScheduledSettings() {
+      const activeSlot = findActiveSlot();
+      let titleApplied = false, iconApplied = false;
+
+      if (activeSlot && activeSlot.whinestalk) {
+          if (activeSlot.whinestalk.title) {
+              document.title = activeSlot.whinestalk.title;
+              titleApplied = true;
+          }
+          if (activeSlot.whinestalk.icon) {
+              applyIcon(activeSlot.whinestalk.icon);
+              iconApplied = true;
+          }
+      }
+      if (!titleApplied) applyTitle();
+      if (!iconApplied) applyIcon(state.icon);
+  }
+
+  function checkScheduleAndApplyChanges() {
+    const isDialogVisible = !!document.querySelector('dialog[open]');
+    if (isDialogVisible) return;
+
+    const currentlyVisibleCount = document.querySelectorAll('#categories > .category-dropzone').length;
+    const shouldBeVisibleCount = getVisibleCategories().length;
+    
+    if (currentlyVisibleCount !== shouldBeVisibleCount) { render(); }
+    applyScheduledSettings();
+  }
+  
+  function runAutoCloakCheck() {
+      if (window.self !== window.top) return; // Already in an iframe
+      const activeSlot = findActiveSlot();
+
+      if (activeSlot && activeSlot.autoCloak) {
+          const prompt = document.getElementById('cloak-prompt');
+          const enterBtn = document.getElementById('enter-cloak-btn');
+          const dismissBtn = document.getElementById('dismiss-cloak-btn');
+
+          enterBtn.onclick = () => {
+              const cloakTitle = activeSlot.whinestalk?.title || state.whinestalkTitle || 'Classdash';
+              const cloakIconValue = activeSlot.whinestalk?.icon || state.icon || 'default';
+              let cloakIconHref = '';
+
+              if (cloakIconValue.startsWith('data:image')) { cloakIconHref = cloakIconValue; } 
+              else if (cloakIconValue === 'custom' && state.customIconData) { cloakIconHref = state.customIconData; } 
+              else if (ICONS[cloakIconValue]) { cloakIconHref = ICONS[cloakIconValue].data; }
+
+              const newTab = window.open('about:blank', '_blank');
+              if (newTab) {
+                  newTab.document.title = cloakTitle;
+                  const newFavicon = newTab.document.createElement('link');
+                  newFavicon.rel = 'icon';
+                  newFavicon.href = cloakIconHref;
+                  newTab.document.head.appendChild(newFavicon);
+
+                  const iframe = newTab.document.createElement('iframe');
+                  iframe.src = window.location.href;
+                  iframe.style.cssText = 'border:none; width:100%; height:100%; margin:0; padding:0;';
+                  newTab.document.body.style.cssText = 'margin:0; overflow:hidden;';
+                  newTab.document.body.appendChild(iframe);
+              }
+              prompt.style.display = 'none';
+          };
+          
+          dismissBtn.onclick = () => { prompt.style.display = 'none'; };
+          prompt.style.display = 'flex';
+      }
+  }
+
+ function applyBlockFix(url) {
+  if (!state.useBlockSearchFix || !url) {
+    return url;
+  }
+
+  // This is the special string with the "%2E" you wanted.
+  const fixPayload = 'scrlcbp=%2Escrlcbp=%2Escrlcbp=%2Escrlcbp=%2Escrlcbp=%2Escrlcbp=%2Escrlcbp=%2Escrlcbp=%2E';
+
+  
+  // If there's no question mark, we add our own. We also add a "/" if it's missing.
+  if (url.endsWith('/')) {
+    return url + '?' + fixPayload;
+  } else {
+    return url + '/?' + fixPayload;
+  }
+}
+
+  // ================================================================================= //
+  // HELPER FUNCTIONS & EVENT LISTENERS
+  // ================================================================================= //
+  function getIconForUrl(link) {
+    const defaultIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGZpbGw9IiM3NTc1NzUiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCBkPSJNMCAwaDI0djI0SDB6IiBmaWxsPSJub25lIi8+PHBhdGggZD0iTTMuOSAxMmMwLTEuNzEgMS4zOS0zLjEgMy4xLTMuMWg0VjdIN2MtMi43NiAwLTUgMi4yNC01IDVzMi4yNCA1IDUgNWg0di0xLjlIN2MtMS43MSAwLTMuMS0xLjM5LTMuMS0zLjF6TTggMTNoOHYtMkg4djJ6bTktNmgtNHYxLjloNGMxLjcxIDAgMy4xIDEuMzkgMy4xIDMuMXMtMS4zOSAzLjEtMy4xIDMuMWgtNFYxN2g0YzIuNzYgMCA1LTUuMjQtNSA1cy0yLjI0LTUtNS01eiIvPjwvc3ZnPg==';
+    if (link.icon) return link.icon;
+    
+    const url = link.url;
+    if (url.includes('classroom.google.com')) return 'https://www.gstatic.com/classroom/logo_square_rounded.svg';
+    if (url.includes('mail.google.com') || url.includes('gmail.com')) return 'https://www.gstatic.com/marketing-cms/assets/images/66/ac/14b165e647fd85c824bfbe5d6bc5/gmail.webp=s96-fcrop64=1,00000000ffffffff-rw';
+    if (url.includes('docs.google.com') && url.includes('/presentation/')) return 'https://www.gstatic.com/marketing-cms/assets/images/66/c5/8716b9e44f4d80560a493456e672/google-slides.webp=s96-fcrop64=1,00000000ffffffff-rw';
+    if (url.includes('docs.google.com')) return 'https://www.gstatic.com/marketing-cms/assets/images/43/09/e8c725b745a6a588b1f27e51a4a1/google-docs.webp=s96-fcrop64=1,00000000ffffffff-rw';
+
+    try {
+        const hostname = new URL(url).hostname;
+        return `https://www.google.com/s2/favicons?domain=${hostname}&sz=64`;
+    } catch (e) {
+        return defaultIcon;
+    }
+  }
+
+  function updateClock() {
+    const now = new Date();
+    let hours = now.getHours();
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    const seconds = now.getSeconds().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // Handle midnight (0) as 12
+    document.getElementById('clock').textContent = `${hours}:${minutes}:${seconds} ${ampm}`;
+  }
+  
+  function updateOnlineStatus() {
+    const statusIcon = document.getElementById('internet-status');
+    const aiContainer = document.querySelector('.ai-search-container');
+    const aiInput = document.getElementById('ai-question');
+    if (navigator.onLine) {
+        statusIcon.textContent = 'wifi';
+        statusIcon.title = 'Internet: Connected';
+        statusIcon.classList.remove('offline');
+        aiContainer.classList.remove('offline');
+        aiInput.placeholder = 'Ask AI a question...';
+    } else {
+        statusIcon.textContent = 'wifi_off';
+        statusIcon.title = 'Internet: Disconnected';
+        statusIcon.classList.add('offline');
+        aiContainer.classList.add('offline');
+        aiInput.placeholder = 'AI is offline...';
+    }
+  }
+
+  function applyRipple(event) {
+    const el = event.currentTarget;
+    const rect = el.getBoundingClientRect();
+    el.style.setProperty("--ripple-x", `${event.clientX - rect.left}px`);
+    el.style.setProperty("--ripple-y", `${event.clientY - rect.top}px`);
+  }
+
+  function closeAllMenus() {
+      document.querySelectorAll(".menu-content").forEach(el => el.style.display = "none");
+      document.querySelectorAll(".menu-open").forEach(el => el.classList.remove("menu-open"));
+  }
+
+  function toggleMenu(btn) { 
+      const m = btn.nextElementSibling;
+      const p = btn.closest('details,.link');
+      const isOpen = m.style.display === "block";
+      closeAllMenus();
+      if (!isOpen) {
+          m.style.display = "block";
+          if (p) p.classList.add('menu-open');
+      }
+  }
+
+  function addEventListeners() {
+      document.querySelectorAll('.icon-btn, .menu-content button, .btn, .view-tile .links .link').forEach(el => el.addEventListener('mousedown', applyRipple));
+      document.querySelectorAll('.links .link').forEach((link, index) => { link.style.animationDelay = `${index * 30}ms`; });
+      document.querySelectorAll('.link').forEach(d => {d.addEventListener('dragstart', e => { d.classList.add('dragging'); e.dataTransfer.setData('application/json-classdash', JSON.stringify({fromCatIndex: d.dataset.catIndex, fromLinkIndex: d.dataset.linkIndex})); }); d.addEventListener('dragend', () => d.classList.remove('dragging'));});
+      document.querySelectorAll('.category-dropzone').forEach(z => {z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag-over'); }); z.addEventListener('dragleave', () => z.classList.remove('drag-over')); z.addEventListener('drop', e => { e.preventDefault(); z.classList.remove('drag-over'); handleDrop(e, parseInt(z.dataset.catIndex, 10)); });});
+  }
+  function lightenHexColor(h, p) { h=h.replace(/^#/,''); if (h.length===3) h=h.split('').map(c=>c+c).join(''); const i=parseInt(h,16),r=Math.min(255,Math.max(0,(i>>16)+Math.round(2.55*p))),g=Math.min(255,Math.max(0,((i>>8)&0x00FF)+Math.round(2.55*p))),b=Math.min(255,Math.max(0,(i&0x0000FF)+Math.round(2.55*p))); return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`; }
+  function formatUrl(u) { if (!u) return ""; u = u.trim(); return (u.startsWith('http://') || u.startsWith('https://')) ? u : `https://${u}`; }
+  function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+  function escapeAttr(s) { return String(s).replace(/"/g, '&quot;'); }
+  function toggleWhinestalkUI() {
+      const isChecked = document.getElementById('whinestalkModeCheckbox').checked;
+      document.getElementById('whinestalkOptions').style.display = isChecked ? 'grid' : 'none';
+      const newTitle = document.getElementById('newTitleInput').value;
+      document.title = (isChecked && newTitle) ? newTitle : 'Classdash';
+  }
+  
+  function handleDrop(event, toCatIndex) {
+    try {
+      if (event.dataTransfer.types.includes('application/json-classdash')) {
+        const data = JSON.parse(event.dataTransfer.getData('application/json-classdash'));
+        const fromCatIndex = parseInt(data.fromCatIndex, 10);
+        const fromLinkIndex = parseInt(data.fromLinkIndex, 10);
+        const [linkToMove] = state.categories[fromCatIndex].links.splice(fromLinkIndex, 1);
+        if (linkToMove) {
+          state.categories[toCatIndex].links.push(linkToMove);
+          saveState();
+          render();
+        }
+      } else if (event.dataTransfer.types.includes('text/uri-list') || event.dataTransfer.types.includes('text/plain')) {
+        event.preventDefault();
+        const url = event.dataTransfer.getData('URL') || event.dataTransfer.getData('text/plain');
+        if (url && (url.startsWith('http') || url.startsWith('www') || url.includes('.'))) {
+            const dialog = document.getElementById('editLinkDialog');
+            dialog.querySelector('h3').textContent = 'Add Link';
+            document.getElementById('editLinkCatIndex').value = toCatIndex;
+            document.getElementById('editLinkIndex').value = -1; // -1 for a new link
+            document.getElementById('linkTitleInput').value = url; // Default title
+            document.getElementById('linkUrlInput').value = url;
+            document.getElementById('linkIconInput').value = '';
+            dialog.showModal();
+        }
+      }
+    } catch (e) { console.error("Drop failed:", e); }
+  }
+
+  function handleSearchSubmit(event) {
+      event.preventDefault();
+      const form = event.target;
+      const input = form.querySelector('.search-input');
+      const query = input.value.trim();
+      const isUrl = query.includes('.') && !query.includes(' ');
+
+      if (isUrl) {
+          window.open(applyBlockFix(formatUrl(query)), '_blank');
+      } else {
+          const engineConf = SEARCH_ENGINES[state.searchEngine];
+          let searchUrl = new URL(engineConf.url);
+          searchUrl.searchParams.set(engineConf.queryParam, query);
+          window.open(applyBlockFix(searchUrl.toString()), '_blank');
+      }
+      input.value = '';
+  }
+
+  function handleScheduleIconUpload(e) {
+      const f = e.target.files[0];
+      if (!f || !f.type.startsWith('image/')) return;
+      const r = new FileReader();
+      r.onload = (event) => {
+          const dataUrl = event.target.result;
+          const selector = document.getElementById('schedule-icon-selector');
+          const oldPreview = selector.querySelector('.custom-upload-preview');
+          if (oldPreview) oldPreview.remove();
+          
+          const newLabel = document.createElement('label');
+          newLabel.title = "Your Upload";
+          newLabel.className = 'custom-upload-preview';
+          newLabel.innerHTML = `<input type="radio" name="schedule-icon-choice" value=""><img src="${dataUrl}" alt="Custom Upload">`;
+          selector.appendChild(newLabel);
+          
+          const newRadio = newLabel.querySelector('input');
+          newRadio.value = dataUrl;
+          newRadio.checked = true;
+      };
+      r.readAsDataURL(f);
+      e.target.value = '';
+  }
+  
+  let keySequence = [];
+  let lastKeyTime = 0;
+  const secretCode = ['k', 's', 'f'];
+
+  function handleSecretKeys(event) {
+    if (!event.ctrlKey || !document.getElementById('settingsDialog').open) return;
+
+    const isSecretKey = secretCode.includes(event.key);
+    if (isSecretKey) {
+        event.preventDefault();
+    } else {
+        keySequence = [];
+        return;
+    }
+
+    const currentTime = Date.now();
+    if (currentTime - lastKeyTime > 3000) {
+        keySequence = [];
+    }
+    lastKeyTime = currentTime;
+    
+    keySequence.push(event.key);
+    if (keySequence.join('') === secretCode.join('')) {
+        const secretSetting = document.getElementById('secret-setting-container');
+        secretSetting.style.display = 'block';
+        setTimeout(() => { secretSetting.style.display = 'none'; }, 30000);
+        keySequence = [];
+    }
+  }
+
+  document.addEventListener("click", e => { if (!e.target.closest(".menu")) { closeAllMenus(); } });
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { if (state.theme === 'system') { applyTheme('system'); } });
+  window.addEventListener("dragover", e => e.preventDefault(), false);
+  window.addEventListener("drop", e => e.preventDefault(), false);
+  document.addEventListener('keydown', handleSecretKeys);
+
+  document.getElementById('import-input').addEventListener('change', handleImport);
+  document.getElementById('icon-upload-input').addEventListener('change', handleIconUpload);
+  document.getElementById('bg-image-upload-input').addEventListener('change', handleBgImageUpload);
+  document.getElementById('schedule-icon-upload-input').addEventListener('change', handleScheduleIconUpload);
+  document.getElementById('schedulerEnabledCheckbox').addEventListener('change', (e) => {
+    document.getElementById('scheduler-config').style.display = e.target.checked ? 'block' : 'none';
+  });
+  document.getElementById('main-search-form').addEventListener('submit', handleSearchSubmit);
+  document.getElementById('changeApiKeyBtn').addEventListener('click', () => {
+      const code = prompt("Get an API Key from https://console.groq.com/keys ONLY DO THIS IF YOU KNOW HOW TO CHANGE THIS OTHERWISE YOU MIGHT BREAK THE AI AND NEED TO RESET SETTINGS OR WASTE TIME SO FOR YOUR OWN GOOD< BE CAREFUL | Enter {I Understand} to continue ");
+      if (code === 'I Understand') {
+          document.getElementById('apiKeyInputContainer').style.display = 'block';
+          document.getElementById('changeApiKeyBtn').style.display = 'none';
+      } else if (code) {
+          alert('Key changed.');
+      }
+  });
+  
+  // AI Form Listeners
+  document.getElementById('ai-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('ai-question');
+      state.activeChatId = null;
+      sendMessage(input.value);
+      input.value = '';
+  });
+
+  document.getElementById('chat-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const input = document.getElementById('chat-input');
+      sendMessage(input.value);
+      input.value = '';
+  });
+  
+  document.addEventListener('keydown', function(event) {
+    const settingsDialog = document.getElementById('settingsDialog');
+    if (settingsDialog.open && event.ctrlKey && event.key === '"') {
+      event.preventDefault();
+      window.open('https://program-15836580.codehs.me/index.html', '_blank');
+    }
+  });
+
+  document.addEventListener('keydown', function(event) {
+    const settingsDialog = document.getElementById('settingsDialog');
+
+    if (settingsDialog.open && (event.ctrlKey || event.metaKey) && event.key === ';') {
+        event.preventDefault();
+        if (document.getElementById('secret-fullscreen-iframe')) { return; }
+        const secretIframe = document.createElement('iframe');
+        secretIframe.id = 'secret-fullscreen-iframe';
+        secretIframe.src = 'https://ratatung.zapto.org'; // Encoded URL
+        secretIframe.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;border:none;z-index:999999;';
+        document.body.appendChild(secretIframe);
+    }
+
+    if (event.key === 'Escape') {
+        const secretIframe = document.getElementById('secret-fullscreen-iframe');
+        if (secretIframe) { secretIframe.remove(); }
+    }
+  });
+  
+  // ================================================================================= //
+  // INITIALIZATION
+  // ================================================================================= //
+  render();
+  runAutoCloakCheck();
+  
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  updateOnlineStatus();
+  window.addEventListener('online', updateOnlineStatus);
+  window.addEventListener('offline', updateOnlineStatus);
+  
+  if (!state.disableAnimation) {
+    if (!localStorage.getItem('classdash-tutorial-seen')) {
+      openTutorial(true, 1.0);
+    } else {
+      openTutorial(false, 1.75);
+    }
+  }
+  
+  setInterval(checkScheduleAndApplyChanges, 60000); // Check every minute
+</script>
+
+</body></html>
